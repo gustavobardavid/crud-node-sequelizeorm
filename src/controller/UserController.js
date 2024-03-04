@@ -6,6 +6,8 @@ module.exports = {
       const user = await User.findOne({ where: { email } })
       if (user) {
         res.status(401).json({ message: "Já existe um usuario com este email" })
+      } else if(!email) {
+        res.status(404).json({message:"campo email nao pode ser vazio"})
       } else {
         const user = await User.create({ name, email })
         res.status(200).json({ user })
