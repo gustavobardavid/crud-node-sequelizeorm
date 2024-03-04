@@ -16,9 +16,9 @@ module.exports = {
   },
   async updateUser(req, res) {
     try {
-      const { id } = req.params
-      const { name, email } = req.body
-      const user = await User.findOne({ where: { id } })
+      const { email } = req.params
+      const { name } = req.body
+      const user = await User.findOne({ where: { email } })
       if (!user) {
         res.status(401).json({ message: "Nenhum usuario encontrado" })
       } else {
@@ -41,13 +41,22 @@ module.exports = {
     }
   },
   async deleteUser(req, res) {
-    const { id } = req.params
-    const user = await User.findOne({ where: { id } })
+    const { email } = req.params
+    const user = await User.findOne({ where: { email } })
     if (!user) {
       res.status(401).json({ message: 'Usuario não encontrado' })
     } else {
-      await User.destroy({ where: { id } })
+      await User.destroy({ where: { email } })
       res.status(200).json({ ok: true })
+    }
+  },
+  async findUser(req, res) {
+    const { email } = req.params
+    const user = await User.findOne({where: { email }})
+    if(!user){
+      res.status(400).json({ message: 'Usuario não encontrado'})
+    } else {
+      res.status(200).json(user)
     }
   }
 }
